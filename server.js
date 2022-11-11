@@ -1,5 +1,6 @@
 const express = require("express")
 const { sequelize } = require("./models")
+const {rootRouter} = require("./routers")
 const path = require("path")
 
 const app = express()
@@ -10,6 +11,9 @@ app.use(express.json())
 // Cài static file
 const publicPathDirectory = path.join(__dirname, "./public")
 app.use(express.static(publicPathDirectory))
+
+// dùng router
+app.use("/api/v1",rootRouter)
 
 // Lắng nghe sự kiện kết nối
 app.listen(3000, async () => {
