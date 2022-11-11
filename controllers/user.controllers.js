@@ -15,6 +15,28 @@ const register = async (req,res) => {
     }
 }
 
+const login = async (req,res) => {
+    const {email,password} = req.body
+    // b1 : tìm ra user đang đăng nhập dựa trên email
+    const user = await User.findOne({
+        where:{
+            email
+        }
+    })
+    if(user){
+        // b2: Kiếm mật khẩu có đúng hay không
+        const isAuth = brcypt.compareSync(password,user.password)
+        if(isAuth){
+            res.status(200).send("Đăng nhập thành công")
+        }else{
+            res.status(500).send("Đăng nhập thất bại")
+        }
+    }else{
+        res.status(404).send("Không tìm thấy user")
+    }
+}
+
 module.exports = {
     register,
+    login,
 }
