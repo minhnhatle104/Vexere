@@ -16,10 +16,31 @@ module.exports = (sequelize, DataTypes) => {
   Station.init({
     name:{
       type:DataTypes.STRING,
-      allowNull:false
+      allowNull:false,
+      validate:{
+        len: [3,30],
+        notEmpty: true,
+      }
     },
-    address: DataTypes.STRING,
-    province: DataTypes.STRING
+    address: {
+      type: DataTypes.STRING,
+      validate:{
+        checkLen(value){
+          if(value.length>=5 && value.length<=20){
+            return true
+          }else{
+            throw new Error("Độ dài address phải từ 5 đến 20")
+          }
+        }
+      }
+    },
+    province:{ 
+      type:DataTypes.STRING,
+      validate:{
+        notEmpty:true,
+        isIn: [['HCM', 'HN',"HP","AG"]],
+      }
+    },
   }, {
     sequelize,
     modelName: 'Station',
